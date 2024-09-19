@@ -3,8 +3,11 @@ import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut, SignInButton, Use
 
 
 import { ModalProvider } from "@/providers/modal-provider"
+import { ToasterProvider } from '@/providers/toast-provider'
 
 import "./globals.css"
+import prismadb from '@/lib/prismadb'
+
 
 const inter = Inter({subsets: ['latin'] })
 
@@ -18,6 +21,7 @@ export default function RootLayout({ children
  }: { 
   children: React.ReactNode 
 }) {
+
   return (
     <ClerkProvider>
       <html lang="en">
@@ -29,6 +33,7 @@ export default function RootLayout({ children
             <SignedIn>
               <UserButton />
             </SignedIn>
+            <ToasterProvider />
             <ModalProvider />
           </header>
          <main>{children}</main>
