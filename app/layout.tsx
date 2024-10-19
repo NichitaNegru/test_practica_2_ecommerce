@@ -1,44 +1,48 @@
-import {Inter} from 'next/font/google'
-import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
+import {
+  ClerkProvider,
+  RedirectToSignIn,
+  SignedIn,
+  SignedOut,
+} from "@clerk/nextjs"
 
+import ToasterProvider from "@/providers/toast-provider"
+import ModalProvider from "@/providers/modal-provider"
 
-import { ModalProvider } from "@/providers/modal-provider"
-import { ToasterProvider } from '@/providers/toast-provider'
+import { Metadata } from "next"
 
 import "./globals.css"
-import prismadb from '@/lib/prismadb'
+import { ThemeProvider } from "@/providers/theme-provider"
 
-
-const inter = Inter({subsets: ['latin'] })
-
-export const metadata ={
-  title: 'Admin Dashboard',
-  description: 'Admin Dashboard',
+export const metadata: Metadata = {
+  title: "Admin Dashboard",
+  description: "Admin Dashboard",
 }
 
-export default function RootLayout({ children
-
- }: { 
-  children: React.ReactNode 
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
 }) {
-
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-        <header>
-            <SignedOut>
-              <SignInButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-            <ToasterProvider />
-            <ModalProvider />
-          </header>
-         <main>{children}</main>
-        </body>
-      </html>
-    </ClerkProvider>
-  );
+      <ClerkProvider>
+          <html lang="en">
+              <body>
+                  <ThemeProvider
+                      attribute="class"
+                      defaultTheme="dark"
+                      enableSystem
+                      disableTransitionOnChange
+                  >
+                      <SignedOut>
+                          <RedirectToSignIn />
+                      </SignedOut>
+                      <SignedIn />
+                      <ToasterProvider />
+                      <ModalProvider />
+                      {children}
+                  </ThemeProvider>
+              </body>
+          </html>
+      </ClerkProvider>
+  )
 }
